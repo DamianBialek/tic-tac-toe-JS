@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700');
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    font-size: 16px;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #444;
+    font-family: 'Lato', sans-serif;
+}
+
+main {
+    background-color: #f0f0f0;
+    width: 50vw;
+    min-width: 308px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(100px, auto));
+    grid-template-rows: repeat(3, minmax(100px, auto));
+    grid-gap: 3px;
+    border: 1px solid #f0f0f0;
+    margin: 50px auto;
+    height: 50vw;
+    min-height: 308px;
+    max-width: 508px;
+    max-height: 508px;
+}
+
+main .box {
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    color: #222;
+    cursor: pointer;
+}
+
+main .box:hover {
+    background-color: #f0f0f0;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100px;
+}
+
+header div {
+    flex-grow: 1;
+    padding: 2rem;
+    font-size: 1.95rem;
+    justify-content: center;
+    color: #ffffff;
+    line-height: 1rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.playerX, .playerO {
+    background-color: #ffc107;
+}
+
+.turn {
+    background-color: #007bff;
+    font-weight: bold;
+    line-height: 1rem;
+}
+
+.player, .turn {
+    position: relative;
+}
+
+.btn {
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1;
+    border-radius: .25rem;
+    color: #ffffff;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.newGame-btn {
+    background-color: #ffc107;
+}

@@ -92,3 +92,15 @@ header div {
 .newGame-btn {
     background-color: #ffc107;
 }
+
+.box.clicked {
+    background-color: transparent;
+}
+
+.winner {
+    background-color: #28a745;
+}
+
+.loser {
+    background-color: #dc3545;
+}

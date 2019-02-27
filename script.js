@@ -82,17 +82,22 @@ Game.prototype.newGameEvent = function() {
 };
 
 Game.prototype.checkWin = function () {
-    if(Object.keys(this.board).length === 9){
-        this.endOfTheRound(null, true);
-        return;
-    }
+    let win = false;
+
     this.combinations.forEach(function (c) {
         if (!this.board.hasOwnProperty(c[0]) || !this.board.hasOwnProperty(c[1]) || !this.board.hasOwnProperty(c[2]))
             return false;
 
-        if (this.board[c[0]] === this.board[c[1]] && this.board[c[1]] === this.board[c[2]])
+        if (this.board[c[0]] === this.board[c[1]] && this.board[c[1]] === this.board[c[2]]) {
             this.endOfTheRound(this.board[c[0]], false);
+            win = true;
+            return true;
+        }
     }.bind(this));
+
+    if(!win)
+        if(Object.keys(this.board).length === 9)
+            this.endOfTheRound(null, true);
 };
 
 Game.prototype.endOfTheRound = function(player, isDraw) {

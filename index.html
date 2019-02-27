@@ -10,13 +10,14 @@
 <header>
     <div class="playerX player">Gracz<b>&nbsp;X</b>:&nbsp;<span id="playerXPoints">0</span></div>
     <div class="turn">
-        <span><button class="btn newGame-btn">Nowa gra</button></span>
-        <!--X-->
+        <button class="btn continue-btn" id="continueBtn">Kontynuuj grę</button>
+        <button class="btn newGame-btn" id="newGameBtn">Nowa gra</button>
     </div>
     <div class="playerO player">Gracz<b>&nbsp;O</b>:&nbsp;<span id="playerOPoints">0</span></div>
 </header>
-<main id="game">
-
+<main>
+    <div id="game" class="board"></div>
+    <div class="messageBox"></div>
 </main>
 
 <script src="script.js"></script>

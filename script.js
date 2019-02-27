@@ -1,6 +1,11 @@
 function Game(options) {
     this.gameBox = document.querySelector(options.gameBox);
     this.playersPoints = [document.querySelector(options.playerX), document.querySelector(options.playerO)];
+    this.buttons = {
+        newGameBtn: document.querySelector(options.newGameBtn),
+        continueBtn: document.querySelector(options.continueBtn),
+    };
+    this.messageBox = document.querySelector(options.messageBox);
     this.players = ['X', 'O'];
     this.board = {};
     this.turn = Math.round(Math.random());
@@ -9,7 +14,7 @@ function Game(options) {
         [0, 3, 6], [1, 4, 7], [2, 5, 8],
         [0, 4, 8], [2, 4, 6]
     ];
-    this.endGame = false;
+    this.endRound = false;
     this.points = [0,0];
 }
 
@@ -20,6 +25,13 @@ Game.prototype.createNewField = function () {
 };
 
 Game.prototype.init = function () {
+    this.draw();
+    this.addEvents();
+};
+
+Game.prototype.draw = function() {
+    this.gameBox.innerHTML = '';
+    this.board = {};
     const fields = document.createDocumentFragment();
     for (let i = 0; i < 9; i++) {
         const field = this.createNewField();
@@ -29,38 +41,77 @@ Game.prototype.init = function () {
     }
 
     this.gameBox.append(fields);
-    this.gameBox.addEventListener("click", function (e) {
-        if (this.endGame || !e.target || e.target.nodeName !== "DIV")
-            return false;
+    this.gameBox.classList.remove("deactivated");
+    this.buttons.continueBtn.classList.add("hide");
+    this.messageBox.classList.add("hide");
+};
 
-        const fieldId = parseInt(e.target.dataset.index);
+Game.prototype.addEvents = function() {
+    this.gameBox.addEventListener("click", this.fieldClickEvent.bind(this));
+    this.buttons.continueBtn.addEventListener("click", this.continueGameEvent.bind(this));
+    this.buttons.newGameBtn.addEventListener("click", this.newGameEvent.bind(this));
+};
 
-        if (this.board.hasOwnProperty(fieldId))
-            return false;
+Game.prototype.fieldClickEvent = function(e) {
+    if (this.endRound || !e.target || e.target.nodeName !== "DIV")
+        return false;
 
-        this.board[fieldId] = this.turn;
-        e.target.innerHTML = this.players[this.turn];
-        e.target.classList.add("clicked");
-        this.turn = (this.turn === 0 ? 1 : 0);
+    const fieldId = parseInt(e.target.dataset.index);
 
-        this.checkWin();
-    }.bind(this));
+    if (this.board.hasOwnProperty(fieldId))
+        return false;
+
+    this.board[fieldId] = this.turn;
+    e.target.innerHTML = this.players[this.turn];
+    e.target.classList.add("clicked");
+    this.turn = (this.turn === 0 ? 1 : 0);
+
+    this.checkWin();
+};
+
+Game.prototype.continueGameEvent = function() {
+    this.draw();
+    this.endRound = false;
+};
+
+Game.prototype.newGameEvent = function() {
+    this.points = [0,0];
+    this.update();
+    this.draw();
+    this.endRound = false;
 };
 
 Game.prototype.checkWin = function () {
+    if(Object.keys(this.board).length === 9){
+        this.endOfTheRound(null, true);
+        return;
+    }
     this.combinations.forEach(function (c) {
         if (!this.board.hasOwnProperty(c[0]) || !this.board.hasOwnProperty(c[1]) || !this.board.hasOwnProperty(c[2]))
             return false;
 
-        if (this.board[c[0]] === this.board[c[1]] && this.board[c[1]] === this.board[c[2]]) {
-            this.points[this.board[c[0]]]++;
-            this.endGame = true;
-            this.update();
-        }
+        if (this.board[c[0]] === this.board[c[1]] && this.board[c[1]] === this.board[c[2]])
+            this.endOfTheRound(this.board[c[0]], false);
     }.bind(this));
 };
 
+Game.prototype.endOfTheRound = function(player, isDraw) {
+    this.gameBox.classList.add("deactivated");
+
+    if(!isDraw) {
+        this.points[player]++;
+        this.messageBox.innerHTML = "Wygrał gracz: <b>" + this.players[player] + "</b>";
+    }
+    else
+        this.messageBox.innerHTML = "Remis !";
+
+    this.messageBox.classList.remove("hide");
+    this.endRound = true;
+    this.update();
+};
+
 Game.prototype.update = function() {
+    this.buttons.continueBtn.classList.toggle("hide");
     this.playersPoints[0].innerHTML = this.points[0];
     this.playersPoints[1].innerHTML = this.points[1];
     this.playersPoints[0].parentElement.classList.remove("winner");
@@ -81,6 +132,9 @@ Game.prototype.update = function() {
 const game = new Game({
     gameBox: "#game",
     playerX: "#playerXPoints",
-    playerO: "#playerOPoints"
+    playerO: "#playerOPoints",
+    newGameBtn: "#newGameBtn",
+    continueBtn: "#continueBtn",
+    messageBox: ".messageBox"
 });
 game.init();

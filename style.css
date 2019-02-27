@@ -109,7 +109,7 @@ header div {
 }
 
 .hide {
-    display: none;
+    display: none !important;
 }
 
 .messageBox {
@@ -130,4 +130,28 @@ header div {
 
 .board.deactivated {
     opacity: 0.5;
+}
+
+@media (max-width: 767px) {
+    header {
+        height: auto;
+        text-align: center;
+        flex-wrap: wrap;
+    }
+
+    header div {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .messageBox {
+        font-size: 28px;
+    }
+
+    .turn .btn {
+        display: block;
+        width: 80%;
+        font-size: 1.3rem;
+        margin: 5px 0;
+    }
 }

@@ -21,7 +21,7 @@ main {
     min-height: 308px;
     max-width: 508px;
     max-height: 508px;
-    margin: 50px auto;
+    margin: 25px auto;
     position: relative;
 }
 .board {
@@ -130,6 +130,15 @@ header div {
 
 .board.deactivated {
     opacity: 0.5;
+}
+h1 {
+    text-align: center;
+    color: #ffffff;
+    margin-top: 0;
+}
+
+#currentTurn {
+    color: #007bff;
 }
 
 @media (max-width: 767px) {

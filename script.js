@@ -6,6 +6,7 @@ function Game(options) {
         continueBtn: document.querySelector(options.continueBtn),
     };
     this.messageBox = document.querySelector(options.messageBox);
+    this.currentTurnField = document.querySelector(options.currentTurnField);
     this.players = ['X', 'O'];
     this.board = {};
     this.turn = Math.round(Math.random());
@@ -44,6 +45,7 @@ Game.prototype.draw = function() {
     this.gameBox.classList.remove("deactivated");
     this.buttons.continueBtn.classList.add("hide");
     this.messageBox.classList.add("hide");
+    this.currentTurnField.innerHTML = this.players[this.turn];
 };
 
 Game.prototype.addEvents = function() {
@@ -53,7 +55,7 @@ Game.prototype.addEvents = function() {
 };
 
 Game.prototype.fieldClickEvent = function(e) {
-    if (this.endRound || !e.target || e.target.nodeName !== "DIV")
+    if (this.endRound || !e.target || (e.target.nodeName !== "DIV" || !e.target.classList.contains("box")))
         return false;
 
     const fieldId = parseInt(e.target.dataset.index);
@@ -67,6 +69,7 @@ Game.prototype.fieldClickEvent = function(e) {
     this.turn = (this.turn === 0 ? 1 : 0);
 
     this.checkWin();
+    this.currentTurnField.innerHTML = this.players[this.turn];
 };
 
 Game.prototype.continueGameEvent = function() {
@@ -84,12 +87,12 @@ Game.prototype.newGameEvent = function() {
 Game.prototype.checkWin = function () {
     let win = false;
 
-    this.combinations.forEach(function (c) {
-        if (!this.board.hasOwnProperty(c[0]) || !this.board.hasOwnProperty(c[1]) || !this.board.hasOwnProperty(c[2]))
+    this.combinations.forEach(function (combination) {
+        if (!this.board.hasOwnProperty(combination[0]) || !this.board.hasOwnProperty(combination[1]) || !this.board.hasOwnProperty(combination[2]))
             return false;
 
-        if (this.board[c[0]] === this.board[c[1]] && this.board[c[1]] === this.board[c[2]]) {
-            this.endOfTheRound(this.board[c[0]], false);
+        if (this.board[combination[0]] === this.board[combination[1]] && this.board[combination[1]] === this.board[combination[2]]) {
+            this.endOfTheRound(this.board[combination[0]], false);
             win = true;
             return true;
         }
@@ -140,6 +143,7 @@ const game = new Game({
     playerO: "#playerOPoints",
     newGameBtn: "#newGameBtn",
     continueBtn: "#continueBtn",
-    messageBox: ".messageBox"
+    messageBox: ".messageBox",
+    currentTurnField: "#currentTurn"
 });
 game.init();
